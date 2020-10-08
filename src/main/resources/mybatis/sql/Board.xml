@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.songjava.mvc.repository.BoardRepository">
+
+	<select id="getList" parameterType="kr.co.songjava.mvc.domain.Board" resultType="kr.co.songjava.mvc.domain.Board">
+		SELECT
+			B.BOARD_SEQ,
+			B.TITLE,
+			B.CONTENTS,
+			B.REG_DATE
+		FROM T_BOARD B
+		ORDER BY B.REG_DATE DESC
+	</select>
+	
+	<select id="get" parameterType="int" resultType="kr.co.songjava.mvc.domain.Board">
+		SELECT
+			B.BOARD_SEQ,
+			B.TITLE,
+			B.CONTENTS,
+			B.REG_DATE
+		FROM T_BOARD B
+		WHERE B.BOARD_SEQ = #{boardSeq}
+	</select>	
+	
+	<insert id="save" parameterType="kr.co.songjava.mvc.domain.Board" useGeneratedKeys="true" keyProperty="boardSeq">
+		INSERT INTO T_BOARD
+		(
+			TITLE,
+			CONTENTS,
+			REG_DATE
+		)
+		VALUES
+		(
+			#{title},
+			#{contents},
+			NOW()
+		)
+	</insert>	
+	
+	<update id="update" parameterType="kr.co.songjava.mvc.domain.Board">
+		UPDATE T_BOARD
+		SET
+			TITLE = #{title},
+			CONTENTS = #{contents}
+		WHERE BOARD_SEQ = #{boardSeq}
+	</update>		
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM T_BOARD
+		WHERE BOARD_SEQ = #{boardSeq}
+	</delete>				
+	
+</mapper>
