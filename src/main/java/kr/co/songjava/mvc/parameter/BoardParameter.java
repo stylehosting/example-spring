@@ -9,4 +9,13 @@ public class BoardParameter {
 	private String title;
 	private String contents;
 	
+	public BoardParameter() {
+		
+	}
+	
+	public BoardParameter(String title, String contents) {
+		this.title = title;
+		this.contents = contents;
+	}
+	
 }
