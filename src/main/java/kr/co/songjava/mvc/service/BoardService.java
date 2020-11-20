@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.songjava.mvc.domain.Board;
 import kr.co.songjava.mvc.parameter.BoardParameter;
+import kr.co.songjava.mvc.parameter.BoardSearchParameter;
 import kr.co.songjava.mvc.repository.BoardRepository;
 
 /**
@@ -23,10 +24,11 @@ public class BoardService {
 	
 	/**
 	 * 목록 리턴.
+	 * @param parameter
 	 * @return
 	 */
-	public List<Board> getList() {
-		return repository.getList();
+	public List<Board> getList(BoardSearchParameter parameter) {
+		return repository.getList(parameter);
 	}
 	
 	/**
