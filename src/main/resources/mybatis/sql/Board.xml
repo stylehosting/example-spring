@@ -12,9 +12,18 @@
 			B.REG_DATE
 		FROM T_BOARD B
 		<where>
+			<!-- 키워드 검색 -->
 			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(keyword)">
 			AND B.TITLE LIKE CONCAT('%', #{keyword}, '%')
 			</if>
+			<!-- 게시판 종류 배열 검색 -->
+			<if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(boardTypes)">
+			AND B.BOARD_TYPE IN (
+				<foreach collection="boardTypes" item="value" separator=",">
+				#{value}
+				</foreach>
+			)
+			</if>			
 		</where>
 		ORDER BY B.REG_DATE DESC
 	</select>
