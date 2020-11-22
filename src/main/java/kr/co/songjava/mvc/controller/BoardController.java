@@ -23,6 +23,8 @@ import io.swagger.annotations.ApiParam;
 import kr.co.songjava.configuration.exception.BaseException;
 import kr.co.songjava.configuration.http.BaseResponse;
 import kr.co.songjava.configuration.http.BaseResponseCode;
+import kr.co.songjava.framework.data.domain.MySQLPageRequest;
+import kr.co.songjava.framework.data.domain.PageRequestParameter;
 import kr.co.songjava.mvc.domain.Board;
 import kr.co.songjava.mvc.parameter.BoardParameter;
 import kr.co.songjava.mvc.parameter.BoardSearchParameter;
@@ -45,13 +47,17 @@ public class BoardController {
 	/**
 	 * 목록 리턴.
 	 * @param parameter
+	 * @param pageable
 	 * @return
 	 */
 	@GetMapping
 	@ApiOperation(value = "목록 조회", notes = "게시물 목록 정보를 조회할 수 있습니다.")
-	public BaseResponse<List<Board>> getList(@ApiParam BoardSearchParameter parameter) {
-		logger.info("getList");
-		return new BaseResponse<List<Board>>(boardService.getList(parameter));
+	public BaseResponse<List<Board>> getList(
+			@ApiParam BoardSearchParameter parameter,
+			@ApiParam MySQLPageRequest pageRequest) {
+		logger.info("pageRequest : {}", pageRequest);
+		PageRequestParameter<BoardSearchParameter> pageRequestParameter = new PageRequestParameter<BoardSearchParameter>(pageRequest, parameter);
+		return new BaseResponse<List<Board>>(boardService.getList(pageRequestParameter));
 	}
 	
 	/**

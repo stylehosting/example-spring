@@ -3,7 +3,7 @@
 
 <mapper namespace="kr.co.songjava.mvc.repository.BoardRepository">
 
-	<select id="getList" parameterType="kr.co.songjava.mvc.parameter.BoardSearchParameter" resultType="kr.co.songjava.mvc.domain.Board">
+	<select id="getList" parameterType="kr.co.songjava.framework.data.domain.PageRequestParameter" resultType="kr.co.songjava.mvc.domain.Board">
 		SELECT
 			B.BOARD_SEQ,
 			B.BOARD_TYPE,
@@ -13,19 +13,20 @@
 		FROM T_BOARD B
 		<where>
 			<!-- 키워드 검색 -->
-			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(keyword)">
-			AND B.TITLE LIKE CONCAT('%', #{keyword}, '%')
+			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(parameter.keyword)">
+			AND B.TITLE LIKE CONCAT('%', #{parameter.keyword}, '%')
 			</if>
 			<!-- 게시판 종류 배열 검색 -->
-			<if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(boardTypes)">
+			<if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(parameter.boardTypes)">
 			AND B.BOARD_TYPE IN (
-				<foreach collection="boardTypes" item="value" separator=",">
+				<foreach collection="parameter.boardTypes" item="value" separator=",">
 				#{value}
 				</foreach>
 			)
 			</if>			
 		</where>
 		ORDER BY B.REG_DATE DESC
+		LIMIT #{pageRequest.limit}, #{pageRequest.offset}
 	</select>
 	
 	<select id="get" parameterType="int" resultType="kr.co.songjava.mvc.domain.Board">
