@@ -3,6 +3,9 @@
 - E02 lombok설치 + Mybatis 설정 + 간단한 게시판 Api 구현 : https://youtu.be/YYlXmkpjRrU
 - E03 Swagger 설치 + 게시판 API 문서화 : https://youtu.be/groXYLpRndI
 - E04 공통 Response class, enum 사용하기 : https://youtu.be/kSII5YLTX2o
+- E05 Spring Message(다국어) 설정 + ControllerAdvice 사용법 + 간편한 데이터 검증/예외처리 : https://youtu.be/UOUTNs_86o8
+- E06 Interceptor, Logback 사용법 : https://www.youtube.com/watch?v=WWZfsbJMXGo
+- E07 Mybatis + MariaDB 활용하여 10000건 이상의 데이터 초스피드로 INSERT
 # 게시판 테이블 DDL
 
 CREATE TABLE `T_BOARD` (

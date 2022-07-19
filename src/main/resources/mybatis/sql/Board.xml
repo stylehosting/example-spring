@@ -3,19 +3,36 @@
 
 <mapper namespace="kr.co.songjava.mvc.repository.BoardRepository">
 
-	<select id="getList" parameterType="kr.co.songjava.mvc.domain.Board" resultType="kr.co.songjava.mvc.domain.Board">
+	<select id="getList" parameterType="kr.co.songjava.framework.data.domain.PageRequestParameter" resultType="kr.co.songjava.mvc.domain.Board">
 		SELECT
 			B.BOARD_SEQ,
+			B.BOARD_TYPE,
 			B.TITLE,
 			B.CONTENTS,
 			B.REG_DATE
 		FROM T_BOARD B
+		<where>
+			<!-- 키워드 검색 -->
+			<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(parameter.keyword)">
+			AND B.TITLE LIKE CONCAT('%', #{parameter.keyword}, '%')
+			</if>
+			<!-- 게시판 종류 배열 검색 -->
+			<if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(parameter.boardTypes)">
+			AND B.BOARD_TYPE IN (
+				<foreach collection="parameter.boardTypes" item="value" separator=",">
+				#{value}
+				</foreach>
+			)
+			</if>			
+		</where>
 		ORDER BY B.REG_DATE DESC
+		LIMIT #{pageRequest.limit}, #{pageRequest.offset}
 	</select>
 	
 	<select id="get" parameterType="int" resultType="kr.co.songjava.mvc.domain.Board">
 		SELECT
 			B.BOARD_SEQ,
+			B.BOARD_TYPE,
 			B.TITLE,
 			B.CONTENTS,
 			B.REG_DATE
@@ -26,21 +43,41 @@
 	<insert id="save" parameterType="kr.co.songjava.mvc.parameter.BoardParameter" useGeneratedKeys="true" keyProperty="boardSeq">
 		INSERT INTO T_BOARD
 		(
+			BOARD_TYPE,
 			TITLE,
 			CONTENTS,
 			REG_DATE
 		)
 		VALUES
 		(
+			#{boardType.code},
 			#{title},
 			#{contents},
 			NOW()
 		)
 	</insert>	
 	
+	<insert id="saveList" parameterType="map">
+		INSERT INTO T_BOARD
+		(
+			TITLE,
+			CONTENTS,
+			REG_DATE
+		)
+		VALUES
+		<foreach collection="boardList" item="board" separator=",">
+		(
+			#{board.title},
+			#{board.contents},
+			NOW()
+		)
+		</foreach>
+	</insert>		
+	
 	<update id="update" parameterType="kr.co.songjava.mvc.domain.Board">
 		UPDATE T_BOARD
 		SET
+			BOARD_TYPE = #{boardType.code},
 			TITLE = #{title},
 			CONTENTS = #{contents}
 		WHERE BOARD_SEQ = #{boardSeq}
